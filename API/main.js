@@ -5,18 +5,18 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 // Import your GraphQL schema, resolvers, and database connection utilities
-const typeDefs = require('./schema'); //
-const resolvers = require('./resolver'); //
-const { connectDB, getDB } = require('./db'); //
+const typeDefs = require('./schema');
+const resolvers = require('./resolver');
+const { connectDB, getDB } = require('./db');
 
 const app = express();
-app.use(cors()); // Enable CORS
+app.use(cors()); 
 
 // Function to extract user information from a JWT token
 const getUserFromToken = (token) => {
   if (token) {
     try {
-      // Remove 'Bearer ' prefix if it exists
+      
       const processedToken = token.startsWith('Bearer ') ? token.slice(7) : token;
       // Verify the token using the secret key
       return jwt.verify(processedToken, process.env.JWT_SECRET || 'P@$$w0rd10$'); //
@@ -37,18 +37,18 @@ async function start() {
 
     // Create a new ApolloServer instance
     const server = new ApolloServer({
-      typeDefs, // Your GraphQL type definitions
-      resolvers, // Your GraphQL resolvers
-      context: ({ req }) => { // Function to set the context for each request
+      typeDefs, 
+      resolvers, 
+      context: ({ req }) => { 
+
         // Get the Authorization header from the request
         const token = req.headers.authorization || ''; //
         // Extract user info from the token
         const user = getUserFromToken(token); //
-        // Return the user and database instance in the context
-        // This makes 'user' and 'db' available to all resolvers
+       
         return { user, db: getDB() }; //
       },
-      // Consider adding formatError for better error handling in development/production
+      // ormatError for better error handling in development/production
       // formatError: (error) => {
       //   console.error(error);
       //   return error;

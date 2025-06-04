@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-default-super-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'P@$$w0rd10$';
 
 
 const resolvers = {
