@@ -1,5 +1,4 @@
-const Order = require('../../models/Order');
-const Product = require('../../models/Product');
+const { Order, Product } = require('../../models');
 const { AuthenticationError, ForbiddenError } = require('apollo-server-express');
 
 const orderResolvers = {

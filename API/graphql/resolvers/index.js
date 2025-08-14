@@ -3,6 +3,7 @@ const productResolvers = require('./products');
 const categoryResolvers = require('./categories');
 const orderResolvers = require('./orders'); 
 const reviewResolvers = require('./reviews');
+const saleResolvers = require('./sales');
 
 const resolvers = {
   Query: {
@@ -11,6 +12,7 @@ const resolvers = {
     ...categoryResolvers.Query,
     ...orderResolvers.Query, 
     ...reviewResolvers.Query,
+    ...saleResolvers.Query,
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -18,6 +20,7 @@ const resolvers = {
     ...categoryResolvers.Mutation,
     ...orderResolvers.Mutation, // This line was missing
     ...reviewResolvers.Mutation,
+    ...saleResolvers.Mutation,
   },
 };
 

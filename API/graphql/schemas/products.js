@@ -1,6 +1,23 @@
 const { gql } = require('apollo-server-express');
 
 module.exports = gql`
+  enum SortOrder {
+    ASC
+    DESC
+  }
+
+  # Forward declaration for Sale type
+  type Sale {
+    id: ID!
+    discountPercentage: Float!
+    discountAmount: Float!
+    salePrice: Float!
+    startDate: Date!
+    endDate: Date!
+    isActive: Boolean!
+    description: String
+  }
+
   type Product {
     id: ID!
     name: String!
@@ -13,6 +30,13 @@ module.exports = gql`
     reviews: [Review!]
     createdAt: Date!
     updatedAt: Date!
+    # Sale-related fields
+    currentSale: Sale
+    salePrice: Float
+    discountPercentage: Float
+    isOnSale: Boolean!
+    effectivePrice: Float!
+    discountAmount: Float!
   }
 
   input ProductInput {
@@ -39,12 +63,16 @@ module.exports = gql`
     minPrice: Float
     maxPrice: Float
     searchQuery: String
+    sortByPrice: SortOrder
+    onSale: Boolean
   }
 
   extend type Query {
     products(filter: ProductFilter): [Product!]!
     product(id: ID!): Product
     featuredProducts(limit: Int = 5): [Product!]!
+    productsByPrice(sortOrder: SortOrder!, limit: Int): [Product!]!
+    productsOnSale(limit: Int): [Product!]!
   }
 
   extend type Mutation {
