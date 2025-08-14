@@ -4,6 +4,7 @@ const productSchema = require('./products');
 const categorySchema = require('./categories');
 const orderSchema = require('./orders');
 const reviewSchema = require('./reviews');
+const saleSchema = require('./sales');
 
 const baseSchema = gql`
   scalar Date
@@ -33,5 +34,6 @@ module.exports = [
   productSchema,
   categorySchema,
   orderSchema,
-  reviewSchema
+  reviewSchema,
+  saleSchema
 ];

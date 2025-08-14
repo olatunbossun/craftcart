@@ -1,45 +1,37 @@
-const { gql } = require('apollo-server-express');
+const mongoose = require('mongoose');
 
-const orderTypeDefs = gql`
-  type Order {
-    id: ID!
-    buyer: User!
-    items: [OrderItem]!
-    total: Float!
-    status: OrderStatus!
-    createdAt: String
-    updatedAt: String
-  }
+const categorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  description: {
+    type: String,
+    trim: true
+  },
+  products: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product'
+  }]
+}, {
+  timestamps: true
+});
 
-  type OrderItem {
-    product: Product!
-    quantity: Int!
-    priceAtPurchase: Float!
-  }
+// Add text index for search
+categorySchema.index({
+  name: 'text',
+  description: 'text'
+});
 
-  enum OrderStatus {
-    PENDING
-    PROCESSING
-    SHIPPED
-    DELIVERED
-    CANCELLED
-  }
+// Virtual for getting product count
+categorySchema.virtual('productCount').get(function() {
+  return this.products ? this.products.length : 0;
+});
 
-  input OrderItemInput {
-    product: ID!
-    quantity: Int!
-  }
+// Ensure virtual fields are serialized
+categorySchema.set('toJSON', { virtuals: true });
+categorySchema.set('toObject', { virtuals: true });
 
-  extend type Query {
-    orders: [Order]
-    order(id: ID!): Order
-    myOrders: [Order]
-  }
-
-  extend type Mutation {
-    createOrder(items: [OrderItemInput]!): Order
-    updateOrderStatus(id: ID!, status: OrderStatus!): Order
-  }
-`;
-
-module.exports = orderTypeDefs;
+module.exports = mongoose.model('Category', categorySchema);

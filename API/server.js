@@ -2,6 +2,10 @@ require('dotenv').config({ path: 'api.env' });
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
+
+// Import models to ensure they are registered
+require('./models');
+
 const typeDefs = require('./graphql/schemas');
 const resolvers = require('./graphql/resolvers');
 const { verifyToken } = require('./utils/auth');

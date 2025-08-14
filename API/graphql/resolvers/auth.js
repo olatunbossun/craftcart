@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/User');
+const { User } = require('../../models');
 const { AuthenticationError } = require('apollo-server-express');
 
 module.exports = {
@@ -67,13 +67,22 @@ module.exports = {
 
   User: {
     products: (user) => {
-      return user.populate('products').execPopulate().then(u => u.products);
+      if (user.products && user.products.length > 0 && typeof user.products[0] === 'object') {
+        return user.products;
+      }
+      return User.findById(user._id).populate('products').then(u => u.products);
     },
     orders: (user) => {
-      return user.populate('orders').execPopulate().then(u => u.orders);
+      if (user.orders && user.orders.length > 0 && typeof user.orders[0] === 'object') {
+        return user.orders;
+      }
+      return User.findById(user._id).populate('orders').then(u => u.orders);
     },
     reviews: (user) => {
-      return user.populate('reviews').execPopulate().then(u => u.reviews);
+      if (user.reviews && user.reviews.length > 0 && typeof user.reviews[0] === 'object') {
+        return user.reviews;
+      }
+      return User.findById(user._id).populate('reviews').then(u => u.reviews);
     }
   }
 };
